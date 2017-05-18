@@ -11,6 +11,8 @@ var command = {
 
 var token = '268377689:AAEehpljdqiY6qITewLNPUkbe60Kbszl95w';
 
+start_bot();
+
 function start_bot() {
     var bot = new TelegramBot(token, { polling: true });
     console.log('We start telegramm bot!');
