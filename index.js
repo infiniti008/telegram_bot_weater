@@ -1,13 +1,10 @@
 var TelegramBot = require('node-telegram-bot-api');
 var fs = require('fs');
 
-
-
-
 var command = {
-    '/echo': ' - Команда ЭХО.'
+    '/echo': ' - Команда ЭХО.',
+    '/help': ' - Список команд'
 };
-
 
 var token = '268377689:AAEehpljdqiY6qITewLNPUkbe60Kbszl95w';
 
