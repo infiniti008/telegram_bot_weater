@@ -1,0 +1,16 @@
+function Person(name, age) {
+    this.id = Person.prototype.id++
+    this.name = name
+    if(age){
+        this.age = age
+    }
+}
+Person.prototype.showAge = function() {
+    console.log( this.age)
+}
+Person.prototype.showinfo = function() {
+    console.log(`name: ${this.name} showAge: ${this.age}`)
+}
+Person.prototype.age = 11 const vova = new Person('vova',99) const test = new 
+Person('test') vova.showinfo() test.showinfo()
+console.log(JSON.stringify(vova),JSON.stringify(test))
