@@ -1,28 +1,38 @@
 var TelegramBot = require('node-telegram-bot-api');
 var fs = require('fs');
 var path_to_user = './user.json';
+var user = new User();
 
-var time = [];
 
-function User {
-    this.kjhnkjnkjnkjn
-}
-
-User.prototype.showAge = function() {
-    console.log( this.age)
-}
-
-function readFrom() {
-    this = require(path_to_user).;
-    console.log(this);
-}
-// function writeTo() {
-//     var to_file = JSON.stringify(user);
+// function saveUsers() {
+//     var to_file = JSON.stringify(users);
 //     fs.writeFileSync(path_to_user, to_file);
-//     console.log('Write siccess');
+// }
+// function readUsers() {
+//     users = require(path_to_user);
+//     for (var p in users) {
+        
+//     }
 // }
 
+function User (){
+    this.time = [];
+}
+
+
+User.prototype.readFrom = function () {
+    this.time = require(path_to_user).time;
+    // console.log(this);
+};
+User.prototype.writeTo = function () {
+    var to_file = JSON.stringify(user);
+    fs.writeFileSync(path_to_user, to_file);
+    console.log('Write success');
+};
+
 var command = {
+    '/start': ' - Начало диалога',
+    '/stop' : ' - Окончание диалога',
     '/echo': ' - Команда ЭХО.',
     '/help': ' - Список команд',
     '/add_time': ' - Добавить время',
@@ -36,12 +46,37 @@ start_bot();
 function start_bot() {
     var bot = new TelegramBot(token, { polling: true });
     console.log('We start telegramm bot!');
+    
+    bot.on('message', function(msg) {
+            if(msg.entities[0].type != 'bot_command'){
+                var chatId = msg.chat.id;
+                console.log('This is bot command');
+                console.log(msg.text);
+                // console.log(add_torr[chatId]);
+                // readFrom();
+                bot.sendMessage(chatId, 'Uncnow command');
+            }
+        });
 
     bot.onText(/\/echo (.+)/, function(msg, match) {
         var chatId = msg.chat.id;
         var resp = match[1];
         bot.sendMessage(chatId, resp);
     });
+    
+    bot.onText(/\/start/, function(msg, match) {
+        var chatId = msg.chat.id;
+        // users[chatId] = new User(chatId);
+        
+        bot.sendMessage(chatId, 'Добро пожаловать');
+    });
+    bot.onText(/\/stop/, function(msg, match) {
+        var chatId = msg.chat.id;
+        var resp = match[1];
+        bot.sendMessage(chatId, resp);
+    });
+
+
 
     bot.onText(/\/help/, function(msg, match) {
         var help = 'Я умею выполнять следующие команды: \n';
@@ -51,8 +86,6 @@ function start_bot() {
         var chatId = msg.chat.id;
         bot.sendMessage(chatId, help);
     });
-    
-    
     bot.onText(/\/add_time (.+)/, function(msg, match) {
         var chatId = msg.chat.id;
         // console.log(match[1].substring(3, 5)*1);
@@ -70,12 +103,12 @@ function start_bot() {
         }
         else{
             bot.sendMessage(chatId, 'Мы сохранили ваше время! Можете добавить еще одно время используя ту-же команду /add_time');
-            time.push(match[1]);
+            user.time.push(match[1]);
+            user.writeTo();
         }
        
         
     });
-    
     bot.onText(/\/add_time/, function(msg, match) {
         if(msg.text == '/add_time'){
             var chatId = msg.chat.id;
@@ -83,23 +116,23 @@ function start_bot() {
         }
     });
     
+    
     bot.onText(/\/show_time/, function(msg, match) {
             var chatId = msg.chat.id;
-            bot.sendMessage(chatId, time);
-            console.log(time);
+
+            
+            user.readFrom();
+            console.log(user);
+            var mes = 'Ваши текущие времена:\n';
+            for (var p in user.time) {
+                mes += user.time[p] + '\n';
+            }
+            bot.sendMessage(chatId, mes);
+            // users[chatId].readFrom();
     });
     
     
     
-        bot.on('message', function(msg) {
-            if(msg.entities[0].type != 'bot_command'){
-                var chatId = msg.chat.id;
-                console.log('This is bot command');
-                console.log(msg.text);
-                // console.log(add_torr[chatId]);
-                // readFrom();
-                bot.sendMessage(chatId, 'Uncnow command');
-            }
-        });
+       
     
 }
